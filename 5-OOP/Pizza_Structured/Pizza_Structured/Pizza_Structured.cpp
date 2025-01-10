@@ -4,11 +4,11 @@ using namespace std;
 
 void MakeTough(const char *type)
 {
-	cout << "Make Tough for " << type << " Pizza" << endl;
+	cout << "Make " << type << " Tough Pizza" << endl;
 }
 void AddToppings(const char *type)
 {
-	cout << "Add Toppings for " << type << " Pizza" << endl;
+	cout << "Add " << type << " Toppings" << endl;
 }
 void BakePizza(const char *type)
 {
@@ -45,8 +45,6 @@ void BuyPizza(int choice)
 	case 3:
 		MakeBeefPizza();
 		break;
-	default:
-		cout << "Incorrect Choice!" << endl;
 	}
 }
 void main()
@@ -65,5 +63,4 @@ void main()
 		cin >> choice;
 	}
 	BuyPizza(choice);
-	
 }
