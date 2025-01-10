@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-
 // Abstract CLass
 class Pizza {
 private:
@@ -18,16 +17,21 @@ private:
 	}
 protected:
 	virtual const char* getPizzaName() = 0;
+	virtual void addExstraToppings()
+	{
+		cout << "Adding Extra Tomato Topping for " << getPizzaName() << " Pizza" << endl;
+	}
 
 public:
 	void makePizza()
 	{
 		makeToughPizza();
 		addToppings();
+		addExstraToppings();
 		bakePizza();
+		cout << "The " << getPizzaName() << " Pizza is Ready!" << endl;
 	}
 };
-
 // Derived Classes
 class ChickenPizza : public Pizza {
 private:
@@ -38,6 +42,10 @@ private:
 };
 class CheesePizza : public Pizza {
 private:
+	virtual void addExstraToppings()
+	{
+		cout << "Adding Extra Cheese for " << getPizzaName() << " Pizza" << endl;
+	}
 	virtual const char* getPizzaName()
 	{
 		return "Cheese";
@@ -50,12 +58,7 @@ private:
 		return "Beef";
 	}
 };
-
-void BuyPizza(Pizza* ptr)
-{
-	ptr->makePizza();
-}
-void PizzaShop(Pizza *pizza, int choice)
+void PizzaShope(Pizza *pizza, int choice)
 {
 	switch (choice)
 	{
@@ -73,7 +76,7 @@ void PizzaShop(Pizza *pizza, int choice)
 	}
 	if (pizza)
 	{
-		BuyPizza(pizza);
+		pizza->makePizza();
 		delete pizza;
 	}
 }
@@ -84,11 +87,14 @@ void main()
 		<< "1. Chicken Pizza" << endl
 		<< "2. Cheese Pizza" << endl
 		<< "3. Beef Pizza" << endl;
+	cout << "Which One: ";
 	cin >> choice;
+	while (choice < 1 || choice > 3)
+	{
+		cout << "Invalid Choice!" << endl;
+		cout << "Enter Again: ";
+		cin >> choice;
+	}
 	Pizza* pizza = NULL;
-	PizzaShop(pizza, choice);
-
-
-	
-
+	PizzaShope(pizza, choice);
 }
