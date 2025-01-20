@@ -3,7 +3,7 @@ using namespace std;
 // Abstract CLass
 class Pizza {
 private:
-	void makeToughPizza()
+	void makeDoughPizza()
 	{
 		cout << "Make " << getPizzaName() << " Tough Pizza" << endl;
 	}
@@ -25,7 +25,7 @@ protected:
 public:
 	void makePizza()
 	{
-		makeToughPizza();
+		makeDoughPizza();
 		addToppings();
 		addExstraToppings();
 		bakePizza();
@@ -35,25 +35,25 @@ public:
 // Derived Classes
 class ChickenPizza : public Pizza {
 private:
-	virtual const char* getPizzaName()
+	const char* getPizzaName()
 	{
 		return "Chicken";
 	}
 };
 class CheesePizza : public Pizza {
 private:
-	virtual void addExstraToppings()
+	void addExstraToppings()
 	{
 		cout << "Adding Extra Cheese for " << getPizzaName() << " Pizza" << endl;
 	}
-	virtual const char* getPizzaName()
+	const char* getPizzaName()
 	{
 		return "Cheese";
 	}
 };
 class BeefPizza : public Pizza {
 private:
-	virtual const char* getPizzaName()
+	const char* getPizzaName()
 	{
 		return "Beef";
 	}
@@ -95,6 +95,6 @@ void main()
 		cout << "Enter Again: ";
 		cin >> choice;
 	}
-	Pizza* pizza = NULL;
+	Pizza* pizza = nullptr;
 	PizzaShope(pizza, choice);
 }
