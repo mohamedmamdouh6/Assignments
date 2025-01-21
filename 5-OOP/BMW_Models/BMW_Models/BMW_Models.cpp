@@ -66,7 +66,7 @@ public:
 };
 // -------------------------------
 // SUVs
-class SUVs : public BMW{
+class SUVs : public BMW {
 private:
 	void security()
 	{
@@ -105,7 +105,7 @@ private:
 		return 41350;
 	}
 };
-class X1M35i: public X1suv {
+class X1M35i : public X1suv {
 private:
 	const char* modelName()
 	{
@@ -126,7 +126,7 @@ private:
 };
 class X4xDrive30i : public X4suv {
 private:
-	void efficiency() 
+	void efficiency()
 	{
 		cout << "Motor: 2.0-liter BMW TwinPower Turbo inline 4-cylinder, 16-valve 248-hp engine." << endl;
 	}
@@ -259,7 +259,7 @@ private:
 };
 // I5
 class I5Sedans : public Sedans {
-private: 
+private:
 	void handling()
 	{
 		cout << "Handling: Variable Sport Steering. " << endl;
@@ -462,11 +462,11 @@ private:
 };
 // 8
 class Convertible8 : public Convertible {
-private: 
+private:
 	void handling()
 	{
 		cout << "Handling: Dynamic Stability Control (DSC), including Brake Fade Compensation," << endl
-			 << "Start - off Assistant, Brake Drying, and Brake Stand - by features. " << endl;
+			<< "Start - off Assistant, Brake Drying, and Brake Stand - by features. " << endl;
 	}
 	void comfort()
 	{
@@ -668,8 +668,11 @@ void BmwCars()
 // Main Function
 void main()
 {
-	while (true)
+	char again = 'y';
+	while (again == 'Y' || again == 'y')
 	{
 		BmwCars();
+		cout << "Do you want to run again(Y/n): ";
+		cin >> again;
 	}
 }
