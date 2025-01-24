@@ -67,7 +67,7 @@ public:
 // -------------------------------
 // SUVs
 class SUVs : public BMW {
-private:
+protected:
 	void security()
 	{
 		cout << "Security: 360-degree cameras, and advanced airbag systems. Sturdy build for enhanced protection" << endl;
@@ -80,7 +80,7 @@ private:
 };
 // X1
 class X1suv : public SUVs {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 2.0-liter BMW TwinPower Turbo inline 4-cylinder, xDrive, intelligent all-wheel drive" << endl;
@@ -95,7 +95,7 @@ private:
 	}
 };
 class X1xDrive28i : public X1suv {
-private:
+protected:
 	const char* modelName()
 	{
 		return "X1 xDrive28i";
@@ -106,7 +106,7 @@ private:
 	}
 };
 class X1M35i : public X1suv {
-private:
+protected:
 	const char* modelName()
 	{
 		return "X1 M35i";
@@ -118,14 +118,14 @@ private:
 };
 // X4
 class X4suv : public SUVs {
-private:
+protected:
 	void comfort()
 	{
 		cout << "Comfort: Advanced Vehicle & Key Memory includes most recently used climate-control temperature and air-distribution settings." << endl;
 	}
 };
 class X4xDrive30i : public X4suv {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 2.0-liter BMW TwinPower Turbo inline 4-cylinder, 16-valve 248-hp engine." << endl;
@@ -144,7 +144,7 @@ private:
 	}
 };
 class X4M40i : public X4suv {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0-liter BMW M TwinPower Turbo inline 6-cylinder, 24-valve 382-hp engine." << endl;
@@ -164,7 +164,7 @@ private:
 };
 // X4M
 class X4Msuv : public SUVs {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0-liter BMW M TwinPower Turbo technology 473-hp inline 6-cylinder engine." << endl;
@@ -188,7 +188,7 @@ private:
 };
 // X5
 class X5suv : public SUVs {
-private:
+protected:
 	void handling()
 	{
 		cout << "Handling: Dynamic Stability Control(DSC), including Brake Fade Compensation." << endl;
@@ -199,7 +199,7 @@ private:
 	}
 };
 class X5xDrive40i : public X5suv {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0 - liter BMW TwinPower Turbo inline 6 - cylinder, 24 - valve 375 - hp engine with eBoost 48V mild hybrid technology." << endl;
@@ -214,7 +214,7 @@ private:
 	}
 };
 class X5M60i : public X5suv {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 4.4-liter BMW M TwinPower Turbo V-8, 32-valve 523-hp engine with eBoost 48V mild hybrid technology. " << endl;
@@ -229,7 +229,7 @@ private:
 	}
 };
 class X5xDrive50e : public X5suv {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0-liter BMW TwinPower Turbo inline 6-cylinder, 24-valve engine." << endl;
@@ -246,7 +246,7 @@ private:
 // ----------------------------------
 // Sedans
 class Sedans : public BMW {
-private:
+protected:
 	void security()
 	{
 		cout << "Security: Standard BMW safety features like lane departure warning, blind-spot detection, and crash mitigation systems." << endl;
@@ -259,7 +259,7 @@ private:
 };
 // I5
 class I5Sedans : public Sedans {
-private:
+protected:
 	void handling()
 	{
 		cout << "Handling: Variable Sport Steering. " << endl;
@@ -270,7 +270,7 @@ private:
 	}
 };
 class I5M60 : public I5Sedans {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: Dual all-electric motors with a total power output of 593 hp and 586 lb ft of torque." << endl;
@@ -285,7 +285,7 @@ private:
 	}
 };
 class I5xDrive40 : public I5Sedans {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: Dual all-electric motors with a total power output of 389-hp and 435 lb-ft of torque. " << endl;
@@ -301,7 +301,7 @@ private:
 };
 // I7
 class I7Sedans : public Sedans {
-private:
+protected:
 	void handling()
 	{
 		cout << "Handling: 4-wheel ventilated disc brakes with Anti-lock Braking System (ABS). " << endl;
@@ -312,7 +312,7 @@ private:
 	}
 };
 class I7xDrive60 : public I7Sedans {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: Dual all-electric motors with a total power output of 536-hp and 549lb-ft of torque. " << endl;
@@ -327,7 +327,7 @@ private:
 	}
 };
 class I7M70 : public I7Sedans {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: Dual all-electric motors with a total power output of 650hp and 749 lb-ft of torque motor. " << endl;
@@ -343,7 +343,7 @@ private:
 };
 // M8
 class M8Sedans : public Sedans {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 4.4-liter BMW M TwinPower Turbo V-8, 32-valve 617-hp engine. " << endl;
@@ -368,7 +368,7 @@ private:
 // -------------------------------
 // Coupes
 class Coupe : public BMW {
-private:
+protected:
 	void security()
 	{
 		cout << "Security: Sport-inspired interiors featuring Alcantara, carbon fiber accents," << endl
@@ -382,7 +382,7 @@ private:
 };
 // 2
 class Coupe2 : public Coupe {
-private:
+protected:
 	void handling()
 	{
 		cout << "Handling: Servotronic power-steering assist. " << endl;
@@ -393,7 +393,7 @@ private:
 	}
 };
 class Coupe230ixDrive : public Coupe2 {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 2.0-liter BMW TwinPower Turbo inline 4-cylinder, xDrive all-wheel drive. " << endl;
@@ -408,7 +408,7 @@ private:
 	}
 };
 class CoupeM240ixDrive : public Coupe2 {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0-liter BMW TwinPower Turbo inline 6-cylinder, xDrive all-wheel drive. " << endl;
@@ -424,7 +424,7 @@ private:
 };
 // M2
 class CoupeM2 : public Coupe {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0-liter BMW M TwinPower Turbo technology 473-hp inline 6-cylinder engine. " << endl;
@@ -449,7 +449,7 @@ private:
 // --------------------------
 // Convertibles 
 class Convertible : public BMW {
-private:
+protected:
 	void security()
 	{
 		cout << "Security: Reinforced roll bars, pop-up roll protection, and robust chassis design for rollover safety." << endl;
@@ -462,7 +462,7 @@ private:
 };
 // 8
 class Convertible8 : public Convertible {
-private:
+protected:
 	void handling()
 	{
 		cout << "Handling: Dynamic Stability Control (DSC), including Brake Fade Compensation," << endl
@@ -474,7 +474,7 @@ private:
 	}
 };
 class Convertible840ixDrive : public Convertible8 {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 3.0-liter BMW TwinPower Turbo inline 6-cylinder, xDrive; intelligent all-wheel drive. " << endl;
@@ -489,7 +489,7 @@ private:
 	}
 };
 class ConvertibleM850ixDrive : public Convertible8 {
-private:
+protected:
 	void efficiency()
 	{
 		cout << "Motor: 4.4-liter BMW M TwinPower Turbo V-8 engine, xDrive; intelligent all-wheel drive. " << endl;
