@@ -28,21 +28,21 @@ public:
 // Derived Classes
 class ChickenPizza : public Pizza {
 protected:
-	virtual const char* getPizzaName()
+	const char* getPizzaName()
 	{
 		return "Chicken";
 	}
 };
 class CheesePizza : public Pizza {
 protected:
-	virtual const char* getPizzaName()
+	const char* getPizzaName()
 	{
 		return "Cheese";
 	}
 };
 class BeefPizza : public Pizza {
 protected:
-	virtual const char* getPizzaName()
+	const char* getPizzaName()
 	{
 		return "Beef";
 	}
@@ -80,7 +80,14 @@ void main()
 		<< "1. Chicken Pizza" << endl
 		<< "2. Cheese Pizza" << endl
 		<< "3. Beef Pizza" << endl;
+	cout << "Which One: ";
 	cin >> choice;
+	while (choice < 1 || choice > 3)
+	{
+		cout << "Invalid Choice!" << endl;
+		cout << "Enter Again: ";
+		cin >> choice;
+	}
 	Pizza* pizza = NULL;
 	PizzaShop(pizza, choice);
 }
