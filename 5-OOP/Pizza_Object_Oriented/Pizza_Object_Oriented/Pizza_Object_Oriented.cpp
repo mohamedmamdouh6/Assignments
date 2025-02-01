@@ -3,7 +3,7 @@ using namespace std;
 // Abstract CLass
 class Pizza {
 private:
-	void makeToughPizza()
+	void makeDoughPizza()
 	{
 		cout << "Make " << getPizzaName() << " Tough Pizza" << endl;
 	}
@@ -20,7 +20,7 @@ protected:
 public:
 	void makePizza()
 	{
-		makeToughPizza();
+		makeDoughPizza();
 		addToppings();
 		bakePizza();
 	}
