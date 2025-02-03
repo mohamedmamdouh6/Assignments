@@ -7,32 +7,45 @@ using namespace std;
 class BigInt {
 private:
 	string number;
+	// ------------Functionalities-------------
+	bool validation(const string&);
+	int compare(const BigInt&, const BigInt&);
+	string subtraction(string& str1, string& str2);
+	string addition(string& str1, string& str2);
 public:
 	// --------------Constructors--------------
 	BigInt();
 	BigInt(const string&);
-	BigInt(long long);
-	BigInt(const char);
+	BigInt(const char*);
+	BigInt(unsigned long long);
+	BigInt(int);
 	BigInt(const BigInt&);
-	// ----------Operator Overloading----------
-	friend int compare(const BigInt&, const BigInt&);
-	// Relational Operator
-	friend bool operator == (const BigInt&, const BigInt&);
-	friend bool operator > (const BigInt&, const BigInt&);
-	friend bool operator < (const BigInt&, const BigInt&);
-	friend bool operator >= (const BigInt&, const BigInt&);
-	friend bool operator <= (const BigInt&, const BigInt&);
-	friend bool operator != (const BigInt&, const BigInt&);
+	// ----------Relational Operator-----------
+	bool operator == (const BigInt&);
+	bool operator > (const BigInt&);
+	bool operator < (const BigInt&);
+	bool operator >= (const BigInt&);
+	bool operator <= (const BigInt&);
+	bool operator != (const BigInt&);
 	// -----------Logical Operators------------
-	friend bool operator && (const BigInt&, const BigInt&);
-	friend bool operator || (const BigInt&, const BigInt&);
-	friend bool operator ! (const BigInt&);
+	bool operator && (const BigInt&);
+	bool operator || (const BigInt&);
+	bool operator ! ();
 	// ----------Arithmetic Operators----------
-		
+
+	BigInt operator + (BigInt&);
 	// -----------Bitwise Operators------------
-		 
+
 	// ----------Assignment Operators----------
 
+
+
+
+
+	string show()
+	{
+		return number;
+	}
 };
 
 #endif

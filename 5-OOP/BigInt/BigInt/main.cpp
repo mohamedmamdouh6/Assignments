@@ -1,13 +1,17 @@
 #include "BigInt.h"
 // The main Function
-void main()
-{
-	try 
-	{
 
-	}
-	catch (invalid_argument e)
-	{
-		cout << e.what();
-	}
+int main() {
+    try
+    {
+        BigInt i("01"); // Invalid
+        BigInt j("-1");
+        BigInt result = i + j;
+        cout <<  result.show() << endl;
+    }
+    catch (invalid_argument s)
+    {
+        cout << s.what();
+    }
+    return 0;
 }
