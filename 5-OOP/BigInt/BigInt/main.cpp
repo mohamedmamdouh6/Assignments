@@ -1,17 +1,18 @@
 #include "BigInt.h"
-// The main Function
 
-int main() {
+int main()
+{
     try
     {
-        BigInt i("01"); // Invalid
-        BigInt j("-1");
-        BigInt result = i + j;
-        cout <<  result.show() << endl;
+        BigInt num1("-0001");
+        BigInt num2("9999999");
+        BigInt result1 = num1 - num2;
+        cout << result1 << endl;
+
     }
-    catch (invalid_argument s)
+    catch (invalid_argument e)
     {
-        cout << s.what();
+        cout << e.what() << endl;
     }
     return 0;
 }

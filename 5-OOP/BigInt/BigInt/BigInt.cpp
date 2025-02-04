@@ -27,23 +27,36 @@ BigInt::BigInt(const BigInt& object) // I'm using '&' so that i don't have to in
 	number = object.number;
 }
 // -----------------Functionalities------------------
+void BigInt::removeLeadingZeros(string& str) // 0
+{
+	int size = str.size();
+	int i = 0;
+	while (str[i] == '0' || str[i] == '-') // -0012 0012221
+		i++;
+	if (i == size)
+	{
+		str = "0";
+	}
+	else if (str[0] == '-')// -00012
+	{
+		i--;
+		str.erase(1, i);
+	}
+	else
+	{
+		str.erase(0, i);
+	}
+
+}
 bool BigInt::validation(const string& str)
 {
 	if (str.empty())
 		throw invalid_argument("The BigInt Is Empty!");
 	int size = str.size();
-	// Validation for Leading Zeros
-	if (size > 1 && str[0] == '-')
-	{
-		if (str[1] == '0')
-		{
-			throw invalid_argument("Leading Zeros Is Invalid");
-		}
-	}
 	// Validation for Numbers
 	int start = 0;
-	if (str[0] == '-')
-		start = 1;
+	if (str[0] == '-' && size > 1)
+		start++;
 	for (int i = start; i < size; i++)
 	{
 		if (!(str[i] >= '0' && str[i] <= '9'))
@@ -103,14 +116,16 @@ int BigInt::compare(const BigInt& object1, const BigInt& object2)
 			return -1;
 	}
 }
-string BigInt::subtraction(string& str1, string& str2)
+string BigInt::subtraction(string str1, string str2)
 {
+	if (str1 == str2)
+		return "0";
+	if (str1 == "0")
+		return str2;
+	if (str2 == "0")
+		return str1;
 	if (str1 < str2)
-	{
-		string temp = str1;
-		str1 = str2;
-		str2 = temp;
-	}
+		swap(str1, str2);
 	int size1 = str1.size();
 	int size2 = str2.size();
 	if (size1 > size2)
@@ -159,18 +174,15 @@ string BigInt::subtraction(string& str1, string& str2)
 	}
 	return result;
 }
-string BigInt::addition(string& str1, string& str2)
+string BigInt::addition(string str1, string str2)
 {
 	int size1 = str1.size();
 	int size2 = str2.size();
 	if (str1[0] == '0')
-	{
 		return str2;
-	}
+
 	if (str2[0] == '0')
-	{
 		return str1;
-	}
 	if (size1 > size2)
 	{
 		for (int i = 0; i < size1 - size2; i++)
@@ -202,7 +214,6 @@ string BigInt::addition(string& str1, string& str2)
 	}
 	return result;
 }
-
 // -------------------Relational Operators----------------
 bool BigInt::operator == (const BigInt& object)
 {
@@ -246,45 +257,95 @@ bool BigInt::operator ! ()
 // ------------------Arithmatic Operators-----------------
 BigInt BigInt::operator + (BigInt& object)
 {
-	string result = "";
-	// ----------- If They are Negative -----------
-	if (number[0] == '-' && object.number[0] == '-')
-	{
-		number.erase(number.begin());
-		object.number.erase(object.number.begin());
-		result = addition(number, object.number);
-		result.insert(0, "-");
-	} // -------- If One Of them is Negative --------
-	else if (number[0] == '-' || object.number[0] == '-')
-	{
-		bool sign = false;
-		if (number[0] == '-')
-		{
-			number.erase(number.begin());
-			if (number > object.number)
-			{
-				sign = true;
-			}
-		}
-		if (object.number[0] == '-')
-		{
-			object.number.erase(object.number.begin());
-			if (object.number > number)
-			{
-				sign = true;
-			}
-		}
-		result = subtraction(number, object.number);
-		if (sign)
-		{
-			result.insert(0, "-");
-		}
-	} // ----------- If They are Positive -----------
-	else if (number[0] != '-' && object.number[0] != '-')
-	{
-		result = addition(number, object.number);
-	}
-	BigInt r = result;
-	return r;
+	// I'm taking a copy
+	string num1 = number;
+	string num2 = object.number;
 
+	removeLeadingZeros(num1);
+	removeLeadingZeros(num2);
+	BigInt result;
+	// -------If they are negative-------
+	if (num1[0] == '-' && num2[0] == '-')
+	{
+		num1.erase(num1.begin());
+		num2.erase(num2.begin());
+		result.number = addition(num1, num2);
+		result.number.insert(0, "-");
+	}// ------if one of them is negative-----
+	else if (num1[0] == '-' || num2[0] == '-')
+	{	
+		bool sign = false;
+		if (num1[0] == '-')
+		{
+			num1.erase(num1.begin());
+			if (num1 > num2) // It Doesn't work
+			{
+				sign = true;
+				result.number = subtraction(num1, num2);
+			}
+		}
+		else if (num2[0] == '-')
+		{
+			num2.erase(num2.begin());
+			if (num2 > num1) // It Doesn't work
+			{
+				sign = true;
+				result.number = subtraction(num2, num1);
+			}
+		}
+		if (sign)
+			result.number.insert(0, "-");
+	}// ------if they are positive------
+	else
+	{
+		result.number = addition(num1, num2);
+
+	}
+	return result;
+}
+BigInt BigInt::operator - (BigInt& object)
+{
+	// I'm taking a copy
+	string num1 = number;
+	string num2 = object.number;
+
+	removeLeadingZeros(num2);
+	removeLeadingZeros(num1);
+	bool sign = false;
+	BigInt result;
+	// ------If they are negative--------
+	if (num1[0] == '-' && num2[0] == '-')
+	{
+		num1.erase(num1.begin());
+		num2.erase(num2.begin());
+		result.number = subtraction(num1, num2);
+		result.number.insert(0, "-");
+	}// ------if one of them is negative------
+	else if (num1[0] == '-' || num2[0] == '-')
+	{
+		if (num1[0] == '-')
+		{
+			num1.erase(num1.begin());
+			if (num1 > num2) // It Doesn't work
+			{
+				sign = true;
+			}
+		}
+		else if (num2[0] == '-')
+		{
+			num2.erase(num2.begin());
+			if (num2 > num1) // It Doesn't work
+			{
+				sign = true;
+			}
+		}
+		result.number = addition(num1, num2);
+		if (sign)
+			result.number.insert(0, "-");
+	}// ------if they are positive-------
+	else
+	{
+		result.number = subtraction(num1, num2);
+	}
+	return result;
 }
