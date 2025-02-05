@@ -8,8 +8,9 @@ class BigInt {
 private:
 	string number;
 	// ------------Functionalities-------------
+ 	void paddingZeros(string&, int);
 	void removeLeadingZeros(string&);
-	bool validation(const string&);
+	bool validation(string);
 	int compare(const BigInt&, const BigInt&);
 	string subtraction(string str1, string str2);
 	string addition(string str1, string str2);
@@ -38,19 +39,17 @@ public:
 	// -----------Bitwise Operators------------
 
 	// ----------Assignment Operators----------
-
-
-
-
-
-	string show()
-	{
-		return number;
-	}
-	friend ostream& operator << (ostream& out, BigInt i)
+	
+	// -------------Other Operators------------
+	friend ostream& operator << (ostream& out, BigInt& i)
 	{
 		out << i.number;
 		return out;
+	}
+	friend istream& operator >> (istream& in, BigInt& i)
+	{
+		in >> i.number;
+		return in;
 	}
 };
 

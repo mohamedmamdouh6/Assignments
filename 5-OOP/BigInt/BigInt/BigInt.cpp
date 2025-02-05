@@ -1,5 +1,5 @@
 #include "BigInt.h"
-// -------------------Constructors-------------------
+// -------------------Constructors-----------------------
 BigInt::BigInt()
 {
 	number = "0";
@@ -22,39 +22,43 @@ BigInt::BigInt(int i)
 {
 	number = to_string(i);
 }
-BigInt::BigInt(const BigInt& object) // I'm using '&' so that i don't have to init a new object
+BigInt::BigInt(const BigInt& object)
 {
 	number = object.number;
 }
-// -----------------Functionalities------------------
-void BigInt::removeLeadingZeros(string& str) // 0
+// -----------------Functionalities----------------------
+void BigInt::paddingZeros(string& str1, int size)
 {
+	for (int i = 0; i < size; i++)
+		str1.insert(0, "0");
+}
+void BigInt::removeLeadingZeros(string& str)
+{ 
 	int size = str.size();
 	int i = 0;
-	while (str[i] == '0' || str[i] == '-') // -0012 0012221
+	while (str[i] == '0' || str[i] == '-')
 		i++;
 	if (i == size)
-	{
 		str = "0";
-	}
-	else if (str[0] == '-')// -00012
+	else if (str[0] == '-')
 	{
 		i--;
 		str.erase(1, i);
 	}
 	else
-	{
 		str.erase(0, i);
-	}
-
 }
-bool BigInt::validation(const string& str)
+bool BigInt::validation(string str)
 {
-	if (str.empty())
-		throw invalid_argument("The BigInt Is Empty!");
 	int size = str.size();
+	// Is empty
+	if (size == 0)
+		throw invalid_argument("The BigInt Is Empty!");
+	// If BigInt == -0
+	if ((str[0] == '-' && str[1] == '0') && size == 2)
+		throw invalid_argument("BigInt Can't be -0");
 	// Validation for Numbers
-	int start = 0;
+	int start = 0;	
 	if (str[0] == '-' && size > 1)
 		start++;
 	for (int i = start; i < size; i++)
@@ -118,33 +122,20 @@ int BigInt::compare(const BigInt& object1, const BigInt& object2)
 }
 string BigInt::subtraction(string str1, string str2)
 {
-	if (str1 == str2)
-		return "0";
-	if (str1 == "0")
-		return str2;
-	if (str2 == "0")
-		return str1;
-	if (str1 < str2)
-		swap(str1, str2);
 	int size1 = str1.size();
 	int size2 = str2.size();
+	// Padding Using Zeros 
 	if (size1 > size2)
-	{
-		for (int i = 0; i < size1 - size2; i++)
-		{
-			str2.insert(0, "0");
-		}
-	}
-	if (size1 < size2)
-	{
-		for (int i = 0; i < size2 - size1; i++)
-		{
-			str1.insert(0, "0");
-		}
-	}
+		paddingZeros(str2, size1 - size1);
+	if (size2 > size1)
+		paddingZeros(str1, size2 - size1);
+	// Swap To subtract the larg number from the small number
+	if (str1 < str2)
+		swap(str1, str2);
+	// Subtraction Operation
 	string result = "";
 	int borrow = 0;
-	for (int i = size1 - 1; i >= 0; i--)
+	for (int i = str1.size() - 1; i >= 0; i--)
 	{
 		int num1 = str1[i] - '0';
 		int num2 = str2[i] - '0';
@@ -161,45 +152,22 @@ string BigInt::subtraction(string str1, string str2)
 		result.insert(result.begin(), total + '0');
 	}
 	// Remove Leading Zeros If There Are
-	int i = 0;
-	while (i < result.size() && result[i] == '0')
-		i++;
-	if (i == result.size())// 00000000
-	{
-		result = "0";
-	}
-	else
-	{
-		result.erase(0, i);
-	}
+	removeLeadingZeros(result);
 	return result;
 }
 string BigInt::addition(string str1, string str2)
 {
 	int size1 = str1.size();
 	int size2 = str2.size();
-	if (str1[0] == '0')
-		return str2;
-
-	if (str2[0] == '0')
-		return str1;
+	// Padding Using Zeros
 	if (size1 > size2)
-	{
-		for (int i = 0; i < size1 - size2; i++)
-		{
-			str2.insert(0, "0");
-		}
-	}
+		paddingZeros(str2, size1 - size2);
 	if (size1 < size2)
-	{
-		for (int i = 0; i < size2 - size1; i++)
-		{
-			str1.insert(0, "0");
-		}
-	}
+		paddingZeros(str1, size2 - size1);
+	// Addition Operation
 	string result = "";
 	int tens = 0;
-	for (int i = size1 - 1; i >= 0; i--)
+	for (int i = str1.size() - 1; i >= 0; i--)
 	{
 		int num1 = str1[i] - '0';
 		int num2 = str2[i] - '0';
@@ -212,9 +180,11 @@ string BigInt::addition(string str1, string str2)
 	{
 		result.insert(0, "1");
 	}
+	// Remove Leading Zeros If There are
+	removeLeadingZeros(result);
 	return result;
 }
-// -------------------Relational Operators----------------
+// ---------------Relational Operators-------------------
 bool BigInt::operator == (const BigInt& object)
 {
 	return compare(number, object) == 0;
@@ -241,7 +211,7 @@ bool BigInt::operator != (const BigInt& object)
 {
 	return !(compare(number, object) == 0);
 }
-// -------------------Logical Operators-------------------
+// ----------------Logical Operators---------------------
 bool BigInt::operator && (const BigInt& object)
 {
 	return !(number == "0") && !(object.number == "0");
@@ -254,15 +224,12 @@ bool BigInt::operator ! ()
 {
 	return number == "0";
 }
-// ------------------Arithmatic Operators-----------------
+// ---------------Arithmatic Operators-------------------
 BigInt BigInt::operator + (BigInt& object)
 {
 	// I'm taking a copy
 	string num1 = number;
 	string num2 = object.number;
-
-	removeLeadingZeros(num1);
-	removeLeadingZeros(num2);
 	BigInt result;
 	// -------If they are negative-------
 	if (num1[0] == '-' && num2[0] == '-')
@@ -278,28 +245,34 @@ BigInt BigInt::operator + (BigInt& object)
 		if (num1[0] == '-')
 		{
 			num1.erase(num1.begin());
-			if (num1 > num2) // It Doesn't work
-			{
+			int size1 = num1.size();
+			int size2 = num2.size();
+			if (size1 > size2)
+				paddingZeros(num2, size1 - size2);
+			if (size2 > size1)
+				paddingZeros(num1, size2 - size2);
+			if (num1 > num2)
 				sign = true;
-				result.number = subtraction(num1, num2);
-			}
 		}
 		else if (num2[0] == '-')
 		{
 			num2.erase(num2.begin());
-			if (num2 > num1) // It Doesn't work
-			{
+			int size1 = num1.size();
+			int size2 = num2.size();
+			if (size1 > size2)
+				paddingZeros(num2, size1 - size2);
+			if (size2 > size1)
+				paddingZeros(num1, size2 - size2);
+			if (num2 > num1)
 				sign = true;
-				result.number = subtraction(num2, num1);
-			}
 		}
+		result.number = subtraction(num1, num2);
 		if (sign)
 			result.number.insert(0, "-");
 	}// ------if they are positive------
 	else
 	{
 		result.number = addition(num1, num2);
-
 	}
 	return result;
 }
@@ -308,32 +281,49 @@ BigInt BigInt::operator - (BigInt& object)
 	// I'm taking a copy
 	string num1 = number;
 	string num2 = object.number;
-
-	removeLeadingZeros(num2);
-	removeLeadingZeros(num1);
-	bool sign = false;
 	BigInt result;
 	// ------If they are negative--------
 	if (num1[0] == '-' && num2[0] == '-')
 	{
+		bool sign = false;
 		num1.erase(num1.begin());
 		num2.erase(num2.begin());
+		int size1 = num1.size();
+		int size2 = num2.size();
+		if (size1 > size2)
+			paddingZeros(num2, size1 - size2);
+		if (size2 > size1)
+			paddingZeros(num1, size2 - size2);
+		if (num1 > num2)
+			sign = true;
 		result.number = subtraction(num1, num2);
-		result.number.insert(0, "-");
+		if (sign)
+			result.number.insert(0, "-");
 	}// ------if one of them is negative------
 	else if (num1[0] == '-' || num2[0] == '-')
 	{
+		bool sign = false;
 		if (num1[0] == '-')
 		{
 			num1.erase(num1.begin());
-			if (num1 > num2) // It Doesn't work
-			{
+			int size1 = num1.size();
+			int size2 = num2.size();
+			if (size1 > size2)
+				paddingZeros(num2, size1 - size2);
+			if (size2 > size1)
+				paddingZeros(num1, size2 - size2);
+			if (num1 > num2)
 				sign = true;
-			}
 		}
 		else if (num2[0] == '-')
 		{
 			num2.erase(num2.begin());
+			int size1 = num1.size();
+			int size2 = num2.size();
+			if (size1 > size2)
+				paddingZeros(num2, size1 - size2);
+			if (size2 > size1)
+				paddingZeros(num1, size2 - size2);
 			if (num2 > num1) // It Doesn't work
 			{
 				sign = true;
@@ -345,7 +335,18 @@ BigInt BigInt::operator - (BigInt& object)
 	}// ------if they are positive-------
 	else
 	{
+		bool sign = false;
+		int size1 = num1.size();
+		int size2 = num2.size();
+		if (size1 > size2)
+			paddingZeros(num2, size1 - size2);
+		if (size2 > size1)
+			paddingZeros(num1, size2 - size2);
+		if (num1 < num2)
+			sign = true;
 		result.number = subtraction(num1, num2);
+		if (sign)
+			result.number.insert(0, "-");
 	}
 	return result;
 }

@@ -2,17 +2,14 @@
 
 int main()
 {
-    try
-    {
-        BigInt num1("-0001");
-        BigInt num2("9999999");
-        BigInt result1 = num1 - num2;
-        cout << result1 << endl;
-
-    }
-    catch (invalid_argument e)
-    {
-        cout << e.what() << endl;
-    }
+    BigInt number1;
+    BigInt number2;
+    BigInt sum;
+    cout << "Enter number1: ";
+    cin >> number1;
+    cout << "Enter numbre2: ";
+    cin >> number2;
+    sum = number1 + number2;
+    cout << sum << endl;
     return 0;
 }
