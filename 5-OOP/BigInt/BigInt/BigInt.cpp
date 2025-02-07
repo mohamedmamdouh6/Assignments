@@ -27,10 +27,20 @@ BigInt::BigInt(const BigInt& object)
 	number = object.number;
 }
 // -----------------Functionalities----------------------
-void BigInt::paddingZeros(string& str1, int size)
+void BigInt::equalSize(string& str1, string& str2)
 {
-	for (int i = 0; i < size; i++)
-		str1.insert(0, "0");
+	int size1 = str1.size();
+	int size2 = str2.size();
+	if (size1 > size2)
+	{
+		for (int i = 0; i < size1 - size2; i++)
+			str2.insert(0, "0");
+	}
+	else if (size2 > size1)
+	{
+		for (int i = 0; i < size2 - size1; i++)
+			str1.insert(0, "0");
+	}
 }
 void BigInt::removeLeadingZeros(string& str)
 { 
@@ -39,7 +49,9 @@ void BigInt::removeLeadingZeros(string& str)
 	while (str[i] == '0' || str[i] == '-')
 		i++;
 	if (i == size)
+	{
 		str = "0";
+	}
 	else if (str[0] == '-')
 	{
 		i--;
@@ -122,16 +134,15 @@ int BigInt::compare(const BigInt& object1, const BigInt& object2)
 }
 string BigInt::subtraction(string str1, string str2)
 {
-	int size1 = str1.size();
-	int size2 = str2.size();
 	// Padding Using Zeros 
-	if (size1 > size2)
-		paddingZeros(str2, size1 - size1);
-	if (size2 > size1)
-		paddingZeros(str1, size2 - size1);
-	// Swap To subtract the larg number from the small number
+	equalSize(str1, str2);
+	// Swap To subtract the small number from the larg number
+	bool sign = false;
 	if (str1 < str2)
+	{
 		swap(str1, str2);
+		sign = true;
+	}
 	// Subtraction Operation
 	string result = "";
 	int borrow = 0;
@@ -153,17 +164,16 @@ string BigInt::subtraction(string str1, string str2)
 	}
 	// Remove Leading Zeros If There Are
 	removeLeadingZeros(result);
+	if (sign)
+	{
+		result.insert(0, "-");
+	}
 	return result;
 }
 string BigInt::addition(string str1, string str2)
 {
-	int size1 = str1.size();
-	int size2 = str2.size();
 	// Padding Using Zeros
-	if (size1 > size2)
-		paddingZeros(str2, size1 - size2);
-	if (size1 < size2)
-		paddingZeros(str1, size2 - size1);
+	equalSize(str1, str2);
 	// Addition Operation
 	string result = "";
 	int tens = 0;
@@ -182,6 +192,35 @@ string BigInt::addition(string str1, string str2)
 	}
 	// Remove Leading Zeros If There are
 	removeLeadingZeros(result);
+	return result;
+}
+string BigInt::multiply(string str1, string str2)
+{
+	string result = "0";
+	for (int i = str1.size() - 1; i >= 0; i--)
+	{
+		string multiplier = "";
+		int carry = 0;
+		for (int j = str2.size() - 1; j >= 0; j--)
+		{
+			int num1 = str1[i] - '0';
+			int num2 = str2[j] - '0';
+			int total = num1 * num2 + carry;
+			carry = total / 10;
+			char digit = (total % 10) + '0';
+			multiplier.insert(multiplier.begin(), digit);
+		}
+		if (carry > 0)
+		{
+			multiplier.insert(multiplier.begin(), carry + '0');
+		}
+		if (i != str1.size() - 1)
+		{
+			for (int zeros = i; zeros < str1.size() - 1; zeros++)
+				multiplier.insert(multiplier.size(), "0");
+		}
+		result = addition(multiplier, result);
+	}
 	return result;
 }
 // ---------------Relational Operators-------------------
@@ -225,12 +264,32 @@ bool BigInt::operator ! ()
 	return number == "0";
 }
 // ---------------Arithmatic Operators-------------------
+BigInt& BigInt::operator ++ ()
+{
+	number = addition(number, "1");
+	return *(this);
+}
+BigInt& BigInt::operator ++ (int)
+{
+	number = addition(number, "1");
+	return *(this);
+}
+BigInt& BigInt::operator -- ()
+{
+	number = subtraction(number, "1");
+	return *(this);
+}
+BigInt& BigInt::operator -- (int)
+{
+	number = subtraction(number, "1");
+	return *(this);
+}
 BigInt BigInt::operator + (BigInt& object)
 {
-	// I'm taking a copy
+	BigInt result;
+	// I'm taking copies
 	string num1 = number;
 	string num2 = object.number;
-	BigInt result;
 	// -------If they are negative-------
 	if (num1[0] == '-' && num2[0] == '-')
 	{
@@ -242,31 +301,23 @@ BigInt BigInt::operator + (BigInt& object)
 	else if (num1[0] == '-' || num2[0] == '-')
 	{	
 		bool sign = false;
-		if (num1[0] == '-')
+		if (num1[0] == '-')// -50 + 100
 		{
 			num1.erase(num1.begin());
-			int size1 = num1.size();
-			int size2 = num2.size();
-			if (size1 > size2)
-				paddingZeros(num2, size1 - size2);
-			if (size2 > size1)
-				paddingZeros(num1, size2 - size2);
+			equalSize(num1, num2);
 			if (num1 > num2)
 				sign = true;
 		}
 		else if (num2[0] == '-')
 		{
 			num2.erase(num2.begin());
-			int size1 = num1.size();
-			int size2 = num2.size();
-			if (size1 > size2)
-				paddingZeros(num2, size1 - size2);
-			if (size2 > size1)
-				paddingZeros(num1, size2 - size2);
+			equalSize(num1, num2);
 			if (num2 > num1)
 				sign = true;
 		}
 		result.number = subtraction(num1, num2);
+		if (result.number[0] == '-')
+			result.number.erase(result.number.begin());
 		if (sign)
 			result.number.insert(0, "-");
 	}// ------if they are positive------
@@ -278,26 +329,19 @@ BigInt BigInt::operator + (BigInt& object)
 }
 BigInt BigInt::operator - (BigInt& object)
 {
-	// I'm taking a copy
+	BigInt result;
+	// I'm taking copies
 	string num1 = number;
 	string num2 = object.number;
-	BigInt result;
 	// ------If they are negative--------
 	if (num1[0] == '-' && num2[0] == '-')
 	{
-		bool sign = false;
 		num1.erase(num1.begin());
 		num2.erase(num2.begin());
-		int size1 = num1.size();
-		int size2 = num2.size();
-		if (size1 > size2)
-			paddingZeros(num2, size1 - size2);
-		if (size2 > size1)
-			paddingZeros(num1, size2 - size2);
-		if (num1 > num2)
-			sign = true;
 		result.number = subtraction(num1, num2);
-		if (sign)
+		if (result.number[0] == '-')
+			result.number.erase(result.number.begin());
+		else if (result.number[0] != '-' && result.number[0] != '0')
 			result.number.insert(0, "-");
 	}// ------if one of them is negative------
 	else if (num1[0] == '-' || num2[0] == '-')
@@ -306,28 +350,11 @@ BigInt BigInt::operator - (BigInt& object)
 		if (num1[0] == '-')
 		{
 			num1.erase(num1.begin());
-			int size1 = num1.size();
-			int size2 = num2.size();
-			if (size1 > size2)
-				paddingZeros(num2, size1 - size2);
-			if (size2 > size1)
-				paddingZeros(num1, size2 - size2);
-			if (num1 > num2)
-				sign = true;
+			sign = true;
 		}
 		else if (num2[0] == '-')
 		{
 			num2.erase(num2.begin());
-			int size1 = num1.size();
-			int size2 = num2.size();
-			if (size1 > size2)
-				paddingZeros(num2, size1 - size2);
-			if (size2 > size1)
-				paddingZeros(num1, size2 - size2);
-			if (num2 > num1) // It Doesn't work
-			{
-				sign = true;
-			}
 		}
 		result.number = addition(num1, num2);
 		if (sign)
@@ -336,17 +363,47 @@ BigInt BigInt::operator - (BigInt& object)
 	else
 	{
 		bool sign = false;
-		int size1 = num1.size();
-		int size2 = num2.size();
-		if (size1 > size2)
-			paddingZeros(num2, size1 - size2);
-		if (size2 > size1)
-			paddingZeros(num1, size2 - size2);
+		equalSize(num1, num2);
 		if (num1 < num2)
 			sign = true;
 		result.number = subtraction(num1, num2);
+		if (result.number[0] == '-')
+			result.number.erase(result.number.begin());
 		if (sign)
 			result.number.insert(0, "-");
+	}
+	return result;
+}
+BigInt BigInt::operator * (BigInt& object)
+{
+	BigInt result;
+	// I'm Taking copies
+	string num1 = number;
+	string num2 = object.number;
+	// If They Are Negative
+	if (num1[0] == '-' && num2[0] == '-')
+	{
+		num1.erase(num1.begin());
+		num2.erase(num2.begin());
+		result.number = multiply(num1, num2);
+	}// If One Of Them Is Negative
+	else if (num1[0] == '-' || num2[0] == '-')
+	{
+		if (num1[0] == '-')
+		{
+			num1.erase(num1.begin());
+		}
+		else if (num2[0] == '-')
+		{
+			num2.erase(num2.begin());
+		}
+		result = multiply(num1, num2);
+		if (result.number[0] != '0')
+			result.number.insert(0, "-");
+	}// If They Are Positive
+	else
+	{
+		result.number = multiply(num1, num2);
 	}
 	return result;
 }
