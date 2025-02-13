@@ -5,8 +5,8 @@ int main()
 {
     try
     {
-        BigInt a("100"), b("10");
-        cout << "100 / 10 = " << (a / b) << " (Expected: 10)" << endl;
+        BigInt a("7423985720934750000020"), b("78423957293849");
+        cout << "100 / 10 = " << (a / b) << " (Expected: 94664767)" << endl;
 
         a = BigInt("12345");
         b = BigInt("5");

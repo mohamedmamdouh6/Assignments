@@ -305,10 +305,10 @@ string BigInt::divide(string dividend, string divisor)
 				result.insert(result.size(), to_string(quotient));
 				product = multiply(to_string(quotient), divisor);
 				remainder = subtract(number, product);
-				if (remainder > "0")
-					number = remainder;
-				else
+				if (remainder == "0" || remainder[0] == '-')
 					number = "";
+				else
+					number = remainder;
 			}
 		}
 	}
