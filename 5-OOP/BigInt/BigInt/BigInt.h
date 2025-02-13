@@ -12,9 +12,11 @@ private:
 	void removeLeadingZeros(string&);
 	bool validation(string);
 	int compare(const BigInt&, const BigInt&);
-	string subtraction(string str1, string str2);
-	string addition(string str1, string str2);
-	string multiply(string str1, string str2);
+	string subtract(string, string);
+	string add(string, string);
+	string multiply(string, string);
+	int divideByApproximation(string, string);
+	string divide(string, string);
 public:
 	// --------------Constructors--------------
 	BigInt();
@@ -42,21 +44,14 @@ public:
 	BigInt operator + (BigInt&);
 	BigInt operator - (BigInt&);
 	BigInt operator * (BigInt&);
+	BigInt operator / (BigInt&);
 	// -----------Bitwise Operators------------
 
 	// ----------Assignment Operators----------
 	
 	// -------------Other Operators------------
-	friend ostream& operator << (ostream& out, const BigInt& i)
-	{
-		out << i.number;
-		return out;
-	}
-	friend istream& operator >> (istream& in, BigInt& i)
-	{
-		in >> i.number;
-		return in;
-	}
+	friend ostream& operator << (ostream& out, const BigInt&);
+	friend istream& operator >> (istream&, BigInt&);
 };
 
 #endif

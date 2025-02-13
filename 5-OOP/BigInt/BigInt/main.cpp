@@ -1,49 +1,57 @@
 #include "BigInt.h"
 // Main Function
+
 int main()
 {
     try
     {
-        BigInt num1 = BigInt("100");
-        BigInt num2 = BigInt("50");
-        BigInt num3 = BigInt("-100");
-        BigInt num4 = BigInt("-50");
-        BigInt num5 = BigInt("-100");
-        BigInt num6 = BigInt("0");
+        BigInt a("100"), b("10");
+        cout << "100 / 10 = " << (a / b) << " (Expected: 10)" << endl;
 
-        BigInt result0 = num2 + num1;
-        BigInt result1 = num1 + num2;
-        BigInt result2 = num3 + num4;
-        BigInt result3 = num3 + num2;
-        BigInt result4 = num1 + num4;
-        BigInt result5 = num4 + num1;
-        BigInt result6 = num2 + num3;
-        BigInt result7 = num5 + num3;
-        BigInt result8 = num6 + num6;
-        BigInt result9 = num6 + num4;
-        BigInt result10 = num6 + num2;
-        BigInt result11 = num4 + num6;
-        BigInt result12 = num2 + num6;
+        a = BigInt("12345");
+        b = BigInt("5");
+        cout << "12345 / 5 = " << (a / b) << " (Expected: 2469)" << endl;
 
-        std::cout << "50 + 100 = " << result0 << " (Expected: 150)\n";
-        std::cout << "100 + 50 = " << result1 << " (Expected: 150)\n";
-        std::cout << "-100 + (-50) = " << result2 << " (Expected: -150)\n";
-        std::cout << "-100 + 50 = " << result3 << " (Expected: -50)\n";
-        std::cout << "100 + (-50) = " << result4 << " (Expected: 50)\n";
-        std::cout << "-50 + 100 = " << result5 << " (Expected: 50)\n";
-        std::cout << "50 + (-100) = " << result6 << " (Expected: -50)\n";
-        std::cout << "-100 + (-100) = " << result7 << " (Expected: -200)\n";
-        std::cout << "0 + 0 = " << result8 << " (Expected: 0)\n";
-        std::cout << "0 + (-50) = " << result9 << " (Expected: -50)\n";
-        std::cout << "0 + 50 = " << result10 << " (Expected: 50)\n";
-        std::cout << "-50 + 0 = " << result11 << " (Expected: -50)\n";
-        std::cout << "50 + 0 = " << result12 << " (Expected: 50)\n";
+        a = BigInt("999999999999999999");
+        b = BigInt("3");
+        cout << "999999999999999999 / 3 = " << (a / b) << " (Expected: 333333333333333333)" << endl;
 
+        a = BigInt("500");
+        b = BigInt("2");
+        cout << "500 / 2 = " << (a / b) << " (Expected: 250)" << endl;
+
+        a = BigInt("1");
+        b = BigInt("2");
+        cout << "1 / 2 = " << (a / b) << " (Expected: 0)" << endl; // Assuming integer division
+
+        a = BigInt("-100");
+        b = BigInt("10");
+        cout << "-100 / 10 = " << (a / b) << " (Expected: -10)" << endl;
+
+        a = BigInt("100");
+        b = BigInt("-10");
+        cout << "100 / -10 = " << (a / b) << " (Expected: -10)" << endl;
+
+        a = BigInt("-100");
+        b = BigInt("-10");
+        cout << "-100 / -10 = " << (a / b) << " (Expected: 10)" << endl;
+
+        a = BigInt("0");
+        b = BigInt("5");
+        cout << "0 / 5 = " << (a / b) << " (Expected: 0)" << endl;
+
+        a = BigInt("10");
+        b = BigInt("0");
+        cout << "10 / 0 = " << (a / b) << " (Expected: Error)" << endl;
     }
     catch (invalid_argument e)
     {
         cout << e.what() << endl;
     }
-
+    catch (runtime_error e)
+    {
+        cout << e.what() << endl;
+    }
+    cout;
     return 0;
 }

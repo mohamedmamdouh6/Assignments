@@ -1,11 +1,11 @@
 #include <iostream>
 using namespace std;
-// Abstract CLass
+// Base CLass
 class Pizza {
 private:
 	void makeDoughPizza()
 	{
-		cout << "Make " << getPizzaName() << " Tough Pizza" << endl;
+		cout << "Make " << getPizzaName() << " Dough Pizza" << endl;
 	}
 	void bakePizza()
 	{
@@ -51,8 +51,22 @@ void BuyPizza(Pizza* ptr)
 {
 	ptr->makePizza();
 }
-void PizzaShop(Pizza* pizza, int choice)
+void PizzaShop()
 {
+	int choice;
+	cout << "Type of Pizza Available:-" << endl
+	    << "1. Chicken Pizza" << endl
+		<< "2. Cheese Pizza" << endl
+		<< "3. Beef Pizza" << endl;
+	cout << "Which One: ";
+	cin >> choice;
+	while (choice < 1 || choice > 3)
+	{
+		cout << "Invalid Choice!" << endl;
+		cout << "Enter Again: ";
+		cin >> choice;
+	}
+	Pizza* pizza = NULL;
 	switch (choice)
 	{
 	case 1:
@@ -75,19 +89,11 @@ void PizzaShop(Pizza* pizza, int choice)
 }
 void main()
 {
-	int choice;
-	cout << "Choose: " << endl
-		<< "1. Chicken Pizza" << endl
-		<< "2. Cheese Pizza" << endl
-		<< "3. Beef Pizza" << endl;
-	cout << "Which One: ";
-	cin >> choice;
-	while (choice < 1 || choice > 3)
+	char again = 'y';
+	while (again == 'y' || again == 'Y')
 	{
-		cout << "Invalid Choice!" << endl;
-		cout << "Enter Again: ";
-		cin >> choice;
+		PizzaShop();
+		cout << "Would you like to order Again? (Y/n): ";
+		cin >> again;
 	}
-	Pizza* pizza = NULL;
-	PizzaShop(pizza, choice);
 }

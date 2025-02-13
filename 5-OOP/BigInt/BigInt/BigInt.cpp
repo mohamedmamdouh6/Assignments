@@ -85,12 +85,8 @@ int BigInt::compare(const BigInt& object1, const BigInt& object2)
 	// If they are equal
 	if (object1.number == object2.number)
 		return 0;
-	int size1 = 0;
-	int size2 = 0;
-	while (object1.number[size1] != '\0')
-		size1++;
-	while (object2.number[size2] != '\0')
-		size2++;
+	int size1 = object1.number.size();
+	int size2 = object2.number.size();
 	// If they are Negative
 	if (object1.number[0] == '-' && object2.number[0] == '-')
 	{
@@ -132,7 +128,7 @@ int BigInt::compare(const BigInt& object1, const BigInt& object2)
 			return -1;
 	}
 }
-string BigInt::subtraction(string str1, string str2)
+string BigInt::subtract(string str1, string str2)
 {
 	// Padding Using Zeros 
 	equalSize(str1, str2);
@@ -170,7 +166,7 @@ string BigInt::subtraction(string str1, string str2)
 	}
 	return result;
 }
-string BigInt::addition(string str1, string str2)
+string BigInt::add(string str1, string str2)
 {
 	// Padding Using Zeros
 	equalSize(str1, str2);
@@ -219,8 +215,104 @@ string BigInt::multiply(string str1, string str2)
 			for (int zeros = i; zeros < str1.size() - 1; zeros++)
 				multiplier.insert(multiplier.size(), "0");
 		}
-		result = addition(multiplier, result);
+		result = add(multiplier, result);
 	}
+	return result;
+}
+int BigInt::divideByApproximation(string numerator, string denominator)
+{
+	// Get the sizes
+	int size1 = numerator.size();
+	int size2 = denominator.size();
+	// Get the Unite Value
+	string partOfNumerator = "";
+	string firstDigitOfDenominator = "";
+	partOfNumerator += numerator[0];// 10
+	firstDigitOfDenominator += denominator[0];// 1
+	if (size1 > size2)
+	{
+		partOfNumerator += "0";//10
+	}
+	int num1 = stoi(partOfNumerator);
+	int num2 = stoi(firstDigitOfDenominator);
+	int uniteValue = num1 / num2;
+	// Get the porduct of multiply Unite Value by remainder of subtract denominator
+	string remainderOfDenominator = denominator;
+	remainderOfDenominator.erase(remainderOfDenominator.begin());
+	string productMuliply = multiply(remainderOfDenominator, to_string(uniteValue));
+	// Get the porduct of subtract actaull numerator by the product of multiply
+	string newNumerator = subtract(numerator, productMuliply);
+	// Get the result by divide the new nemerator by the approximate denominator
+	partOfNumerator = newNumerator[0];
+	if (newNumerator.size() > denominator.size())
+	{
+		partOfNumerator += newNumerator[1];
+	}
+	num1 = stoi(partOfNumerator);
+	num2 = stoi(firstDigitOfDenominator);
+	int result = num1 / num2;
+	return result;
+}
+string BigInt::divide(string dividend, string divisor)
+{
+	removeLeadingZeros(dividend);
+	removeLeadingZeros(divisor);
+	if (divisor == "0")
+		throw runtime_error("Can Not Divide By Zero!");
+	if (dividend == "0")
+		return "0";
+	string result = "";
+	string product = "";
+	string remainder = "";
+	string number = "";
+	int quotient;
+	bool terminate = false;
+	while (dividend.size() > 0)
+	{
+		int index = 0;
+
+		// Getting the number >= divisor
+		while ((number.size() == divisor.size() && divisor > number) || divisor.size() > number.size())
+		{
+			if (dividend.size() > 0)
+			{
+				terminate = false;
+				number += dividend[0];
+				dividend.erase(dividend.begin());
+				removeLeadingZeros(number);
+				if ((number.size() == divisor.size() && divisor > number) || divisor.size() > number.size())
+				{
+					result += "0";
+					terminate = true;
+				}
+			}
+			else
+				break;
+		}
+		removeLeadingZeros(number);
+		if (terminate && dividend.size() == 0)
+		{
+			removeLeadingZeros(result);
+			return result;
+		}
+		else
+		{
+			string s1 = number;
+			string s2 = divisor;
+			quotient = divideByApproximation(number, divisor);
+			if (quotient != 0)
+			{
+				result.insert(result.size(), to_string(quotient));
+				product = multiply(to_string(quotient), divisor);
+				remainder = subtract(number, product);
+				if (remainder > "0")
+					number = remainder;
+				else
+					number = "";
+			}
+		}
+	}
+	removeLeadingZeros(result);
 	return result;
 }
 // ---------------Relational Operators-------------------
@@ -266,22 +358,22 @@ bool BigInt::operator ! ()
 // ---------------Arithmatic Operators-------------------
 BigInt& BigInt::operator ++ ()
 {
-	number = addition(number, "1");
+	number = add(number, "1");
 	return *(this);
 }
 BigInt& BigInt::operator ++ (int)
 {
-	number = addition(number, "1");
+	number = add(number, "1");
 	return *(this);
 }
 BigInt& BigInt::operator -- ()
 {
-	number = subtraction(number, "1");
+	number = subtract(number, "1");
 	return *(this);
 }
 BigInt& BigInt::operator -- (int)
 {
-	number = subtraction(number, "1");
+	number = subtract(number, "1");
 	return *(this);
 }
 BigInt BigInt::operator + (BigInt& object)
@@ -295,27 +387,27 @@ BigInt BigInt::operator + (BigInt& object)
 	{
 		num1.erase(num1.begin());
 		num2.erase(num2.begin());
-		result.number = addition(num1, num2);
+		result.number = add(num1, num2);
 		result.number.insert(0, "-");
 	}// ------if one of them is negative-----
 	else if (num1[0] == '-' || num2[0] == '-')
 	{	
 		bool sign = false;
-		if (num1[0] == '-')// -50 + 100
+		if (num1[0] == '-')
 		{
 			num1.erase(num1.begin());
 			equalSize(num1, num2);
 			if (num1 > num2)
 				sign = true;
 		}
-		else if (num2[0] == '-')
+		else
 		{
 			num2.erase(num2.begin());
 			equalSize(num1, num2);
 			if (num2 > num1)
 				sign = true;
 		}
-		result.number = subtraction(num1, num2);
+		result.number = subtract(num1, num2);
 		if (result.number[0] == '-')
 			result.number.erase(result.number.begin());
 		if (sign)
@@ -323,7 +415,7 @@ BigInt BigInt::operator + (BigInt& object)
 	}// ------if they are positive------
 	else
 	{
-		result.number = addition(num1, num2);
+		result.number = add(num1, num2);
 	}
 	return result;
 }
@@ -338,7 +430,7 @@ BigInt BigInt::operator - (BigInt& object)
 	{
 		num1.erase(num1.begin());
 		num2.erase(num2.begin());
-		result.number = subtraction(num1, num2);
+		result.number = subtract(num1, num2);
 		if (result.number[0] == '-')
 			result.number.erase(result.number.begin());
 		else if (result.number[0] != '-' && result.number[0] != '0')
@@ -352,11 +444,11 @@ BigInt BigInt::operator - (BigInt& object)
 			num1.erase(num1.begin());
 			sign = true;
 		}
-		else if (num2[0] == '-')
+		else
 		{
 			num2.erase(num2.begin());
 		}
-		result.number = addition(num1, num2);
+		result.number = add(num1, num2);
 		if (sign)
 			result.number.insert(0, "-");
 	}// ------if they are positive-------
@@ -366,7 +458,7 @@ BigInt BigInt::operator - (BigInt& object)
 		equalSize(num1, num2);
 		if (num1 < num2)
 			sign = true;
-		result.number = subtraction(num1, num2);
+		result.number = subtract(num1, num2);
 		if (result.number[0] == '-')
 			result.number.erase(result.number.begin());
 		if (sign)
@@ -393,7 +485,7 @@ BigInt BigInt::operator * (BigInt& object)
 		{
 			num1.erase(num1.begin());
 		}
-		else if (num2[0] == '-')
+		else
 		{
 			num2.erase(num2.begin());
 		}
@@ -406,4 +498,47 @@ BigInt BigInt::operator * (BigInt& object)
 		result.number = multiply(num1, num2);
 	}
 	return result;
+}
+BigInt BigInt::operator / (BigInt& object)
+{
+	// I'm Taking Copies
+	string num1 = number;
+	string num2 = object.number;
+	BigInt result;
+	// If They Are Negative
+	if (num1[0] == '-' && num2[0] == '-')
+	{
+		num1.erase(num1.begin());
+		num2.erase(num2.begin());
+		result.number = divide(num1, num2);
+	}// If One Of Them Is Negative
+	else if (num1[0] == '-' || num2[0] == '-')
+	{
+		if (num1[0] == '-')
+		{
+			num1.erase(num1.begin());
+		}
+		else
+		{
+			num2.erase(num2.begin());
+		}
+		result.number = divide(num1, num2);
+		result.number.insert(0, "-");
+	}// If They Are Positive
+	else
+	{
+		result.number = divide(num1, num2);
+	}
+	return result;
+}
+// -------------------Other Operators--------------------
+ostream& operator << (ostream& out, const BigInt& value)
+{
+	out << value.number;
+	return out;
+}
+istream& operator >> (istream& in, BigInt& i)
+{
+	in >> i.number;
+	return in;
 }
