@@ -15,8 +15,10 @@ private:
 	string subtract(string, string);
 	string add(string, string);
 	string multiply(string, string);
-	int divideByApproximation(string, string);
+	long long divideByApproximation(string, string);
 	string divide(string, string);
+	string mod(string, string);
+	string pow(string, string);
 public:
 	// --------------Constructors--------------
 	BigInt();
@@ -45,10 +47,16 @@ public:
 	BigInt operator - (BigInt&);
 	BigInt operator * (BigInt&);
 	BigInt operator / (BigInt&);
+	BigInt operator % (BigInt&);
+	BigInt operator ^ (BigInt&);
 	// -----------Bitwise Operators------------
 
 	// ----------Assignment Operators----------
-	
+	void operator += (BigInt&);
+	void operator -= (BigInt&);
+	void operator *= (BigInt&);
+	void operator /= (BigInt&);
+	void operator %= (BigInt&);
 	// -------------Other Operators------------
 	friend ostream& operator << (ostream& out, const BigInt&);
 	friend istream& operator >> (istream&, BigInt&);
