@@ -6,12 +6,12 @@ BigInt::BigInt()
 }
 BigInt::BigInt(const char* ch)
 {
-	if (validation(ch))
+	if (validate(ch))
 		number = ch;
 }
 BigInt::BigInt(const string& str)
 {
-	if (validation(str))
+	if (validate(str))
 		number = str;
 }
 BigInt::BigInt(unsigned long long ll)
@@ -24,7 +24,8 @@ BigInt::BigInt(int i)
 }
 BigInt::BigInt(const BigInt& object)
 {
-	number = object.number;
+	if (validate(object.number))
+		number = object.number;
 }
 // -----------------Functionalities----------------------
 void BigInt::equalSize(string& str1, string& str2)
@@ -60,15 +61,21 @@ void BigInt::removeLeadingZeros(string& str)
 	else
 		str.erase(0, i);
 }
-bool BigInt::validation(string str)
+bool BigInt::validate(string str)
 {
 	int size = str.size();
 	// Is empty
 	if (size == 0)
 		throw invalid_argument("The BigInt Is Empty!");
-	// If BigInt == -0
-	if ((str[0] == '-' && str[1] == '0') && size == 2)
-		throw invalid_argument("BigInt Can't be -0");
+	// If BigInt == -00000000000
+	if ((str[0] == '-' && str[1] == '0'))
+	{
+		int i = 1;
+		while (str[i] == '0')
+			i++;
+		if (i == str.size())
+			throw invalid_argument("BigInt Can't be: " + str);
+	}
 	// Validation for Numbers
 	int start = 0;	
 	if (str[0] == '-' && size > 1)
@@ -331,20 +338,20 @@ string BigInt::pow(string base, string power)
 	removeLeadingZeros(base);
 	removeLeadingZeros(power);
 	if (power[0] == '-')
-		throw runtime_error("Power Can Not be Negative");
-	string result = base;
+		return "0";
 	if (power == "0")
-		result = "1";
-	else
-	{
+		return "1";
+	string odd = mod(power, "2");
+	if (odd == "1")
 		power = subtract(power, "1");
-		while (power != "0")
-		{
-			result = multiply(result, base);
-			power = subtract(power, "1");
-		}
+	string result = base;
+	while (power != "1")
+	{
+		result = multiply(result, result);
+		power = divide(power, "2");
 	}
-
+	if (odd == "1")
+		result = multiply(result, base);
 	return result;
 }
 // ---------------Relational Operators-------------------
@@ -798,6 +805,23 @@ void BigInt::operator %= (BigInt& object)
 		number = mod(num1, num2);
 	}
 }
+void BigInt::operator ^= (BigInt& object)
+{
+	// I'm Taking Copies
+	string base = number;
+	string power = object.number;
+	bool sign = false;
+	if (base[0] == '-')
+	{
+		base.erase(base.begin());
+		string temp = divide(power, "2");
+		if (temp == "1")
+			sign = true;
+	}
+	number = pow(base, power);
+	if (sign)
+		number.insert(number.begin(), '-');
+}
 // -------------------Other Operators--------------------
 ostream& operator << (ostream& out, const BigInt& value)
 {
@@ -806,6 +830,9 @@ ostream& operator << (ostream& out, const BigInt& value)
 }
 istream& operator >> (istream& in, BigInt& i)
 {
-	in >> i.number;
+	BigInt temp1;
+	in >> temp1.number;
+	BigInt temp2(temp1);
+	i.number = temp2.number;
 	return in;
 }

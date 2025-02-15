@@ -10,7 +10,7 @@ private:
 	// ------------Functionalities-------------
  	void equalSize(string&, string&);
 	void removeLeadingZeros(string&);
-	bool validation(string);
+	bool validate(string);
 	int compare(const BigInt&, const BigInt&);
 	string subtract(string, string);
 	string add(string, string);
@@ -49,14 +49,13 @@ public:
 	BigInt operator / (BigInt&);
 	BigInt operator % (BigInt&);
 	BigInt operator ^ (BigInt&);
-	// -----------Bitwise Operators------------
-
 	// ----------Assignment Operators----------
 	void operator += (BigInt&);
 	void operator -= (BigInt&);
 	void operator *= (BigInt&);
 	void operator /= (BigInt&);
 	void operator %= (BigInt&);
+	void operator ^= (BigInt&);
 	// -------------Other Operators------------
 	friend ostream& operator << (ostream& out, const BigInt&);
 	friend istream& operator >> (istream&, BigInt&);
