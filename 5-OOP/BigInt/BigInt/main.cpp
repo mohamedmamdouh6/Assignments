@@ -22,7 +22,7 @@ int main()
             cout << e.what() << endl;
         }
     }
-    cout << "Enter a sign (-, +, *, /, %, ^): ";
+    cout << "Enter an operator (-, +, *, /, %, ^): ";
     cin >> sign;
     terminate = true;
     while (terminate)
@@ -62,6 +62,8 @@ int main()
     case '^':
         result = number1 ^ number2;
         break;
+    default:
+        cout << "Invalid Operator!" << endl;
     }
     cout << "Result: " << result;
     return 0;
