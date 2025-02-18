@@ -658,9 +658,9 @@ void BmwCars()
 		BmwCar = new ConvertibleM850ixDrive;
 		break;
 	}
-	BmwCar->spacification();
 	if (BmwCar)
 	{
+		BmwCar->spacification();
 		delete BmwCar;
 	}
 }

@@ -24,6 +24,12 @@ int main()
     }
     cout << "Enter an operator (-, +, *, /, %, ^): ";
     cin >> sign;
+    while (sign != '-' && sign != '+' && sign != '*' && sign != '/' && sign != '%' && sign != '^')
+    {
+        cout << "Invalid Operator! " << endl;
+        cout << "Please Enter An Operator Again: ";
+        cin >> sign;
+    }
     terminate = true;
     while (terminate)
     {
@@ -62,8 +68,6 @@ int main()
     case '^':
         result = number1 ^ number2;
         break;
-    default:
-        cout << "Invalid Operator!" << endl;
     }
     cout << "Result: " << result;
     return 0;
