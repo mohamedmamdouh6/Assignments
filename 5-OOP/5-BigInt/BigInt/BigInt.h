@@ -8,7 +8,7 @@ class BigInt {
 private:
 	string number;
 	// ------------Functionalities-------------
- 	void equalSize(string&, string&);
+	void equalSize(string&, string&);
 	void removeLeadingZeros(string&);
 	bool validate(string);
 	int compare(const BigInt&, const BigInt&);
