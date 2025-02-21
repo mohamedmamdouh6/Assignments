@@ -1,8 +1,8 @@
+#ifndef BIGINT_H
+#define BIGINT_H
 #include <iostream>
 #include <string>
 #include <exception>
-#ifndef BIGINT_H
-#define BIGINT_H
 using namespace std;
 class BigInt {
 private:
@@ -60,5 +60,4 @@ public:
 	friend ostream& operator << (ostream& out, const BigInt&);
 	friend istream& operator >> (istream&, BigInt&);
 };
-
-#endif
+#endif // BIGINT_H

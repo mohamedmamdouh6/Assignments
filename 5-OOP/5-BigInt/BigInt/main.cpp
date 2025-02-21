@@ -1,5 +1,8 @@
+#include <iostream>
+#include <exception>
 #include "BigInt.h"
-// Main Function
+using namespace std;
+// Main
 int main()
 {
     BigInt number1, number2, result;
