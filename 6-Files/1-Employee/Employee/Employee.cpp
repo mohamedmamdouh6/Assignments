@@ -98,7 +98,7 @@ void Employee::print(string line)
 	cout << "|First Name|: " << arr[1] << "\n---------------------\n";
 	cout << "|Surname|: " << arr[2] << "\n---------------------\n";
 	cout << "|Email|: " << arr[3] << "\n---------------------\n";
-	cout << "|Roll|: " << arr[4] << "\n---------------------\n";
+	cout << "|Role|: " << arr[4] << "\n---------------------\n";
 	cout << "|Responsibility|: " << arr[5] << "\n---------------------\n";
 	cout << "|Skills|: " << arr[6] << "\n---------------------\n";
 	cout << "|Work Model|: " << arr[7] << "\n---------------------\n";
@@ -113,7 +113,7 @@ void Employee::print(string line)
 	cout << "\n===============================================================" << endl;
 }
 // Storing Functionalities
-void Employee::storeID(string id)
+void Employee::storeID(string& id)
 {
 	while (isEmpExist(id) != "0" || !isID(id) || id.size() > 7)
 	{
@@ -130,7 +130,7 @@ void Employee::storeID(string id)
 		cin >> id;
 	}
 }
-void Employee::storeName(string name)
+void Employee::storeName(string& name)
 {
 	while (!isChars(name) || name.size() > 15)
 	{
@@ -139,7 +139,7 @@ void Employee::storeName(string name)
 		cin >> name;
 	}
 }
-void Employee::storeEmail(string email)
+void Employee::storeEmail(string& email)
 {
 	while (!isMail(email) || email.size() > 33)
 	{
@@ -149,7 +149,7 @@ void Employee::storeEmail(string email)
 	}
 
 }
-void Employee::storeData(string data)
+void Employee::storeData(string& data)
 {
 	while (data.size() > 1000 || verifyPipe(data))
 	{
@@ -158,7 +158,7 @@ void Employee::storeData(string data)
 		getline(cin >> ws, data);
 	}
 }
-void Employee::storeSalary(double salary)
+void Employee::storeSalary(int& salary)
 {
 	while (salary < 500)
 	{
@@ -191,11 +191,11 @@ void Employee::addEmployee()
 	string email;
 	cin >> email;
 	storeEmail(email);
-	// Roll
-	cout << "Roll: ";
-	string roll;
-	getline(cin >> ws, roll);
-	storeData(roll);
+	// Role
+	cout << "Role: ";
+	string role;
+	getline(cin >> ws, role);
+	storeData(role);
 	// Responsibility
 	cout << "Responsibility: ";
 	string responsibility;
@@ -233,7 +233,7 @@ void Employee::addEmployee()
 	storeData(shift);
 	// Salary
 	cout << "Salary: ";
-	double salary;
+	int salary;
 	cin >> salary;
 	storeSalary(salary);
 	// Achievements
@@ -267,7 +267,7 @@ void Employee::addEmployee()
 	employee << firstName << "|";
 	employee << surname << "|";
 	employee << email << "|";
-	employee << roll << "|";
+	employee << role << "|";
 	employee << responsibility << "|";
 	employee << skills << "|";
 	employee << workModel << "|";
@@ -332,7 +332,7 @@ void Employee::editEmployee()
 		<< "[1] First Name\n"
 		<< "[2] Surname\n"
 		<< "[3] Email\n"
-		<< "[4] Roll\n"
+		<< "[4] Role\n"
 		<< "[5] Responsibility\n"
 		<< "[6] Skills\n"
 		<< "[7] Work Model\n"
@@ -393,7 +393,7 @@ void Employee::editEmployee()
 	}
 	case 4:
 	{
-		cout << "New Roll: ";
+		cout << "New Role: ";
 		cin >> m;
 		storeData(m);
 		break;
@@ -450,12 +450,9 @@ void Employee::editEmployee()
 	case 12:
 	{
 		cout << "New Salary: ";
-		double s;
+		int s;
 		cin >> s;
 		storeSalary(s);
-		stringstream r;
-		r << setprecision(2) << fixed << s;
-		m = r.str();
 		break;
 	}
 	case 13:

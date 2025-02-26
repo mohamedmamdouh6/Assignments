@@ -6,7 +6,6 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
-#include <iomanip>
 using namespace std;
 // Employee
 class Employee {
@@ -21,11 +20,11 @@ private:
 	bool verifyPipe(string);
 	void print(string);
 	// Storing Functionalities
-	void storeID(string);
-	void storeName(string);
-	void storeEmail(string);
-	void storeData(string);
-	void storeSalary(double);
+	void storeID(string&);
+	void storeName(string&);
+	void storeEmail(string&);
+	void storeData(string&);
+	void storeSalary(int&);
 public:
 	// User Functionalities
 	void addEmployee();
