@@ -5,19 +5,29 @@
 #include <exception>
 #include <fstream>
 #include <ctime>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 // Employee
 class Employee {
 private:
-	// Private Data Members
+	// Data Members
 	fstream employee;
-	// Private Functionalities Members
-	bool isIDExist(string);
+	// Generic Functionalities
+	string isEmpExist(string);
 	bool isChars(string);
-	bool isIdDigits(string);
+	bool isID(string);
 	bool isMail(string);
+	bool verifyPipe(string);
+	void print(string);
+	// Storing Functionalities
+	void storeID(string);
+	void storeName(string);
+	void storeEmail(string);
+	void storeData(string);
+	void storeSalary(double);
 public:
-	// Public Functionalities Members
+	// User Functionalities
 	void addEmployee();
 	void editEmployee();
 	void showEmployee();

@@ -1,6 +1,6 @@
 #include "Employee.h"
-// Private Functionalities
-bool Employee::isIDExist(string id)
+// Generic Functionalities
+string Employee::isEmpExist(string id)
 {
 	string line;
 	if (employee.is_open())
@@ -8,7 +8,7 @@ bool Employee::isIDExist(string id)
 	if (!employee.is_open())
 	{
 		employee.open("Employees.txt", ios::in | ios::app);
-		if (!employee.is_open())
+		if (employee.fail())
 			throw runtime_error("We Can Not Access The File!");
 	}
 	while (getline(employee, line))
@@ -23,11 +23,11 @@ bool Employee::isIDExist(string id)
 		if (check == id)
 		{
 			employee.close();
-			return true;
+			return line;
 		}
 	}
 	employee.close();
-	return false;
+	return "0";
 }
 bool Employee::isChars(string str)
 {
@@ -39,11 +39,13 @@ bool Employee::isChars(string str)
 	}
 	return true;
 }
-bool Employee::isIdDigits(string str)
+bool Employee::isID(string str)
 {
+	if (!isalpha(str[0]) || !isupper(str[0]) || str[1] != '0')
+		return false;
 	str.erase(str.begin());
 	int size = str.size();
-	for (int i = 0; i < size; i++)
+	for (int i = 1; i < size; i++)
 	{
 		if (!isdigit(str[i]))
 			return false;
@@ -73,17 +75,49 @@ bool Employee::isMail(string str)
 		return true;
 	return false;
 }
-// Public Functionalities
-void Employee::addEmployee()
+bool Employee::verifyPipe(string str)
 {
-	cout << "Please Enter The Following Data Of The Employee:-" << endl;
-	// ID
-	cout << "ID: ";
-	string id;
-	cin >> id;
-	while (isdigit(id[0]) || id[1] != '0' || !isupper(id[0]) || isIDExist(id) || !isIdDigits(id) || id.size() > 7)// M023
+	int size = str.size();
+	for (int i = 0; i < size; i++)
 	{
-		if (isIDExist(id))
+		if (str[i] == '|')
+			return true;
+	}
+	return false;
+}
+void Employee::print(string line)
+{
+	stringstream temp(line);
+	int i = 0;
+	string arr[16];
+	while (getline(temp >> ws, arr[i], '|'))
+		i++;
+	// Printing
+	cout << "====================== Employee " << arr[0] << " =======================" << endl;
+	cout << "|ID|: " << arr[0] << "\n---------------------\n";
+	cout << "|First Name|: " << arr[1] << "\n---------------------\n";
+	cout << "|Surname|: " << arr[2] << "\n---------------------\n";
+	cout << "|Email|: " << arr[3] << "\n---------------------\n";
+	cout << "|Roll|: " << arr[4] << "\n---------------------\n";
+	cout << "|Responsibility|: " << arr[5] << "\n---------------------\n";
+	cout << "|Skills|: " << arr[6] << "\n---------------------\n";
+	cout << "|Work Model|: " << arr[7] << "\n---------------------\n";
+	cout << "|Project|: " << arr[8] << "\n---------------------\n";
+	cout << "|Team|: " << arr[9] << "\n---------------------\n";
+	cout << "|Status|: " << arr[10] << "\n---------------------\n";
+	cout << "|Shift|: " << arr[11] << "\n---------------------\n";
+	cout << "|Salary|: $" << arr[12] << "\n---------------------\n";
+	cout << "|Achievements|: " << arr[13] << "\n---------------------\n";
+	cout << "|Behavior|: " << arr[14] << "\n---------------------\n";
+	cout << arr[15];
+	cout << "\n===============================================================" << endl;
+}
+// Storing Functionalities
+void Employee::storeID(string id)
+{
+	while (isEmpExist(id) != "0" || !isID(id) || id.size() > 7)
+	{
+		if (isEmpExist(id) != "0")
 		{
 			cout << "The ID Is Exist Already!" << endl;
 			cout << "Please Enter Another One: ";
@@ -95,146 +129,123 @@ void Employee::addEmployee()
 		}
 		cin >> id;
 	}
-	// First Name
-	cout << "First Name: ";
-	string firstName;
-	cin >> firstName;
-	while (!isChars(firstName) || firstName.size() > 15)
+}
+void Employee::storeName(string name)
+{
+	while (!isChars(name) || name.size() > 15)
 	{
-		cout << "Invalide First Name!" << endl;
-		cout << "First Name: ";
-		cin >> firstName;
+		cout << "Invalide Name!" << endl;
+		cout << "Enter Again: ";
+		cin >> name;
 	}
-	// Surname
-	cout << "Surname: ";
-	string surname;
-	cin >> surname;
-	while (!isChars(surname) || surname.size() > 15)
-	{
-		cout << "Invalide Surname!" << endl;
-		cout << "Surname: ";
-		cin >> surname;
-	}
-	// Email
-	cout << "Email: ";
-	string email;
-	cin >> email;
+}
+void Employee::storeEmail(string email)
+{
 	while (!isMail(email) || email.size() > 33)
 	{
 		cout << "Invalide Email!" << endl;
 		cout << "Email: ";
 		cin >> email;
 	}
-	// Roll
-	cout << "Roll: ";
-	string roll;
-	getline(cin >> ws, roll);
-	while (roll.size() > 50)
+
+}
+void Employee::storeData(string data)
+{
+	while (data.size() > 1000 || verifyPipe(data))
 	{
-		cout << "Invalid Roll!" << endl;
-		cout << "Roll: ";
-		getline(cin >> ws, roll);
+		cout << "Invalid Data!" << endl;
+		cout << "Please Enter Again: ";
+		getline(cin >> ws, data);
 	}
-	// Responsibility
-	cout << "Responsibility: ";
-	string responsibility;
-	getline(cin >> ws, responsibility);
-	while (responsibility.size() > 100)
-	{
-		cout << "Invalid Responsibility!" << endl;
-		cout << "Responsibility: ";
-		getline(cin >> ws, responsibility);
-	}
-	// Skills
-	cout << "Skills: ";
-	string skills;
-	getline(cin >> ws, skills);
-	while (skills.size() > 150)
-	{
-		cout << "Invalid Skills!" << endl;
-		cout << "Skills: ";
-		getline(cin >> ws, skills);
-	}
-	// Work Model
-	cout << "Work Model: ";
-	string workModel;
-	getline(cin >> ws, workModel);
-	while (workModel.size() > 20)
-	{
-		cout << "Invalid Work Model!" << endl;
-		cout << "Work Model: ";
-		getline(cin >> ws, workModel);
-	}
-	// Project
-	cout << "Project: ";
-	string project;
-	getline(cin >> ws, project);
-	while (project.size() > 100)
-	{
-		cout << "Invalid Project!" << endl;
-		cout << "Project: ";
-		getline(cin >> ws, project);
-	}
-	// Team
-	cout << "Team: ";
-	string team;
-	getline(cin >> ws, team);
-	while (team.size() > 50)
-	{
-		cout << "Invalid Team!" << endl;
-		cout << "Team: ";
-		getline(cin >> ws, team);
-	}
-	// Status
-	cout << "Status: ";
-	string status;
-	getline(cin >> ws, status);
-	while (status.size() > 100)
-	{
-		cout << "Invalid Status!" << endl;
-		cout << "Status: ";
-		getline(cin >> ws, status);
-	}
-	// Shift
-	cout << "Shift: ";
-	string shift;
-	getline(cin >> ws, shift);
-	while (shift.size() > 20)
-	{
-		cout << "Invalid Shift!" << endl;
-		cout << "Shift: ";
-		getline(cin >> ws, shift);
-	}
-	// Salary
-	cout << "Salary: ";
-	float salary;
-	cin >> salary;
+}
+void Employee::storeSalary(double salary)
+{
 	while (salary < 500)
 	{
 		cout << "Invalid Salary!" << endl;
 		cout << "Salary: ";
 		cin >> salary;
 	}
+}
+// User Functionalities
+void Employee::addEmployee()
+{
+	cout << "Please Enter The Following Data Of The Employee:-" << endl;
+	// ID
+	cout << "ID: ";
+	string id;
+	cin >> id;
+	storeID(id);
+	// First Name
+	cout << "First Name: ";
+	string firstName;
+	cin >> firstName;
+	storeName(firstName);
+	// Surname
+	cout << "Surname: ";
+	string surname;
+	cin >> surname;
+	storeName(surname);
+	// Email
+	cout << "Email: ";
+	string email;
+	cin >> email;
+	storeEmail(email);
+	// Roll
+	cout << "Roll: ";
+	string roll;
+	getline(cin >> ws, roll);
+	storeData(roll);
+	// Responsibility
+	cout << "Responsibility: ";
+	string responsibility;
+	getline(cin >> ws, responsibility);
+	storeData(responsibility);
+	// Skills
+	cout << "Skills: ";
+	string skills;
+	getline(cin >> ws, skills);
+	storeData(skills);
+	// Work Model
+	cout << "Work Model: ";
+	string workModel;
+	getline(cin >> ws, workModel);
+	storeData(workModel);
+	// Project
+	cout << "Project: ";
+	string project;
+	getline(cin >> ws, project);
+	storeData(project);
+	// Team
+	cout << "Team: ";
+	string team;
+	getline(cin >> ws, team);
+	storeData(team);
+	// Status
+	cout << "Status: ";
+	string status;
+	getline(cin >> ws, status);
+	storeData(status);
+	// Shift
+	cout << "Shift: ";
+	string shift;
+	getline(cin >> ws, shift);
+	storeData(shift);
+	// Salary
+	cout << "Salary: ";
+	double salary;
+	cin >> salary;
+	storeSalary(salary);
 	// Achievements
 	cout << "Achievements: ";
 	string achievement;
 	getline(cin >> ws, achievement);
-	while (achievement.size() > 1000)
-	{
-		cout << "Invalid Achievement!" << endl;
-		cout << "Achievement: ";
-		getline(cin >> ws, achievement);
-	}
+	storeData(achievement);
 	// Behavior
 	cout << "Behavior: ";
 	string behavior;
 	getline(cin >> ws, behavior);
-	while (behavior.size() > 500)
-	{
-		cout << "Invalid Behavior!" << endl;
-		cout << "Behavior: ";
-		getline(cin >> ws, behavior);
-	}
+	storeData(behavior);
 	// Date & Time
 	time_t now = time(nullptr);
 	tm localTime;
@@ -243,9 +254,14 @@ void Employee::addEmployee()
 	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &localTime);
 	string date_time(buffer);
 	// Opening The Employee File
-	employee.open("Employees.txt", ios::out | ios::app);
+	if (employee.is_open())
+		employee.close();
 	if (!employee.is_open())
-		throw runtime_error("We Can Not Access The File!");
+	{
+		employee.open("Employees.txt", ios::out | ios::app);
+		if (employee.fail())
+			throw runtime_error("We Can Not Access The File!");
+	}
 	// Storing The Data
 	employee << id << "|";
 	employee << firstName << "|";
@@ -265,10 +281,263 @@ void Employee::addEmployee()
 	employee << date_time << "|";
 	employee << endl;
 	employee.close();
-}
-void Employee::editEmployee()
-{
+	string line = isEmpExist(id);
+	cout << "		-----------------------------------------------------------" << endl;
+	cout << "		.*.    The Employee Has Been Successfully Registered!	.*." << endl;
+	cout << "		-----------------------------------------------------------" << endl;
+	print(line);
 }
 void Employee::showEmployee()
 {
+	// Verify ID
+	cout << "Please Enter The Employee ID: ";
+	string id;
+	cin >> id;
+	string line = isEmpExist(id);
+	while (line == "0")
+	{
+		cout << "ID Is Not Exist!" << endl;
+		cout << "Please Enter an Exist ID: ";
+		cin >> id;
+		line = isEmpExist(id);
+	}
+	// Print
+	print(line);
+}
+void Employee::editEmployee()
+{
+	// Get The Employee Line
+	string line;
+	char again = 'n';
+	while (again == 'n' || again == 'N')
+	{
+		cout << "Please Enter The Employee ID: ";
+		string id;
+		cin >> id;
+		line = isEmpExist(id);
+		while (line == "0")
+		{
+			cout << "ID Is Not Exist!" << endl;
+			cout << "Please Enter an Exist ID: ";
+			cin >> id;
+			line = isEmpExist(id);
+		}
+		print(line);
+		cout << "Is This What You Are Looking For? (N/y): ";
+		cin >> again;
+	}
+	// Specify Which Data
+	cout << "Which Data Would You Like To Modify?\n"
+		<< "[0] ID\n"
+		<< "[1] First Name\n"
+		<< "[2] Surname\n"
+		<< "[3] Email\n"
+		<< "[4] Roll\n"
+		<< "[5] Responsibility\n"
+		<< "[6] Skills\n"
+		<< "[7] Work Model\n"
+		<< "[8] Project\n"
+		<< "[9] Team\n"
+		<< "[10] Status\n"
+		<< "[11] Shift\n"
+		<< "[12] Salary\n"
+		<< "[13] Achievements\n"
+		<< "[14] Behavior\n" << endl;
+	cout << "Which One?: ";
+	int choice;
+	cin >> choice;
+	while (choice > 14 || choice < 0)
+	{
+		cout << "Invalid Choice!" << endl;
+		cout << "Please Choose Again: ";
+		cin >> choice;
+	}
+	// Store Employee Info In Array Of String
+	int i = 0;
+	string str[16];
+	stringstream temp(line);
+	while (getline(temp >> ws, str[i], '|'))
+		i++;
+	// Store Modifications In m
+	cout << "Please Enter Your Modifications:-\n";
+	string m;
+	switch (choice)
+	{
+	case 0:
+	{
+		cout << "New ID: ";
+		cin >> m;
+		storeID(m);
+		break;
+	}
+	case 1:
+	{
+		cout << "New First Name: ";
+		cin >> m;
+		storeName(m);
+		break;
+	}
+	case 2:
+	{
+		cout << "New Surname: ";
+		cin >> m;
+		storeName(m);
+		break;
+	}
+	case 3:
+	{
+		cout << "New Email: ";
+		cin >> m;
+		storeEmail(m);
+		break;
+	}
+	case 4:
+	{
+		cout << "New Roll: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 5:
+	{
+		cout << "New Responsibility: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 6:
+	{
+		cout << "New Skills: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 7:
+	{
+		cout << "New Work Model: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 8:
+	{
+		cout << "New Project: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 9:
+	{
+		cout << "New Team: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 10:
+	{
+		cout << "New Status: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 11:
+	{
+		cout << "New Shift: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 12:
+	{
+		cout << "New Salary: ";
+		double s;
+		cin >> s;
+		storeSalary(s);
+		stringstream r;
+		r << setprecision(2) << fixed << s;
+		m = r.str();
+		break;
+	}
+	case 13:
+	{
+		cout << "New Achievements: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	case 14:
+	{
+		cout << "New Behavior: ";
+		cin >> m;
+		storeData(m);
+		break;
+	}
+	}
+	// Replace Old Data With New Data
+	str[choice] = m;
+	// Convert Array To Line
+	string newLine;
+	for (int i = 0; i < 16; i++)
+	{
+		newLine += str[i];
+		newLine += '|';
+	}
+	// Store New Line In File
+	if (employee.is_open())
+		employee.close();
+	if (!employee.is_open())
+	{
+		employee.open("Employees.txt", ios::in);
+		if (employee.fail())
+			throw runtime_error("We Can Not Access The File!");
+	}
+	// Create New Temp File
+	fstream tempFile;
+	if (tempFile.is_open())
+		tempFile.close();
+	else
+	{
+		tempFile.open("Temp_File.txt", ios::out);
+		if (tempFile.fail())
+			throw runtime_error("We Can Not Access The File!");
+		tempFile.seekg(0, ios::end);
+		if (tempFile.tellg() != 0)
+			throw runtime_error("'Temp_File.txt' Is Exist Already!");
+	}
+	// Get Old ID
+	string oldID;
+	int x = 0;
+	while (line[x] != '|')
+	{
+		oldID += line[x];
+		x++;
+	}
+	// Move The Data From ''Employees.txt' To 'Temp_File.txt'
+	string tempLine;
+	while (getline(employee, tempLine))
+	{
+		int i = 0;
+		string checkID;
+		while (tempLine[i] != '|')
+		{
+			checkID += tempLine[i];
+			i++;
+		}
+		if (checkID != oldID)
+		{
+			tempFile << tempLine << endl;
+		}
+	}
+	// Add The Employee After Modification
+	tempFile << newLine << endl;
+	// Delete The Old File And Rename The New File
+	employee.close();
+	tempFile.close();
+	remove("Employees.txt");
+	rename("Temp_File.txt", "Employees.txt");
+	// Printing The Modification
+	cout << "		-----------------------------------------------------------" << endl;
+	cout << "		.*.    The Employee Has Been Successfully Modified!	.*." << endl;
+	cout << "		-----------------------------------------------------------" << endl;
+	print(newLine);
 }
