@@ -252,14 +252,49 @@ void LinkedList<T>::merge(LinkedList<T>& list)
 	length += list.length;
 }
 template <class T>
-void LinkedList<T>::deleteList()
+T LinkedList<T>::min()
 {
-	while (head)
+	if (!head)
+		throw exception("List Is Empty!");
+	Node<T>* temp = head;
+	T min = temp->value;
+	while (temp)
 	{
-		Node<T>* delNode = head;
-		head = head->next;
-		delete delNode;
+		if (min > temp->value)
+			min = temp->value;
+		temp = temp->next;
 	}
+	return min;
+}
+template <class T>
+T LinkedList<T>::max()
+{
+	if (!head)
+		throw exception("List Is Empty!");
+	Node<T>* temp = head;
+	T max = temp->value;
+	while (temp)
+	{
+		if (max < temp->value)
+			max = temp->value;
+		temp = temp->next;
+	}
+	return max;
+}
+template <class T>
+int LinkedList<T>::count(T element)
+{
+	if (!head)
+		throw exception("List Is Empty!");
+	Node<T>* temp = head;
+	int count = 0;
+	while (temp)
+	{
+		if (element == temp->value)
+			count++;
+		temp = temp->next;
+	}
+	return count;
 }
 template <class T>
 void LinkedList<T>::display()
@@ -276,6 +311,81 @@ template <class T>
 int LinkedList<T>::getLength()
 {
 	return length;
+}
+template <class T>
+bool LinkedList<T>::isEmpty()
+{
+	if (!head)
+		return true;
+	else
+		return false;
+}
+template <class T>
+void LinkedList<T>::deleteList()
+{
+	while (head)
+	{
+		Node<T>* delNode = head;
+		head = head->next;
+		delete delNode;
+	}
+}
+// ------- Operator OverLoading ---------
+template <class T>
+void LinkedList<T>::operator = (initializer_list<T> list)
+{
+	if (list.size() == 0)
+		throw exception("Initializer List Is Empty!");
+	while (head)
+	{
+		Node<T>* delNode = head;
+		head = head->next;
+		delete delNode;
+		length--;
+	}
+	Node<T>* temp = nullptr;
+	for (T item : list)
+	{
+		Node<T>* newNode = new Node<T>;
+		newNode->value = item;
+		if (!head)
+			head = temp =  newNode;
+		else
+		{
+			temp->next = newNode;
+			temp = newNode;
+		}
+		length++;
+	}
+}
+template <class T>
+void LinkedList<T>::operator = (const LinkedList<T>& copy)
+{
+	while (head)
+	{
+		Node<T>* delNode = head;
+		head = head->next;
+		delete delNode;
+		length--;
+	}
+	Node<T>* temp = copy.head;
+	Node<T>* prev = nullptr;
+	while (temp)
+	{
+		Node<T>* newNode = new Node<T>;
+		newNode->value = temp->value;
+		if (!head)
+		{
+			head = prev = newNode;
+		}
+		else
+		{
+			prev->next = newNode;
+			prev = newNode;
+		}
+		temp = temp->next;
+		length++;
+	}
 }
 // ------ Explicit Instantiation --------
 template class LinkedList<int>;

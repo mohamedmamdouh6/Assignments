@@ -37,8 +37,15 @@ public:
 	void reverse();
 	void sort();
 	void merge(LinkedList<T>&);
-	void deleteList();
+	T min();
+	T max();
+	int count(T);
 	void display();
 	int getLength();
+	bool isEmpty();
+	void deleteList();
+	// Operator Overloading
+	void operator = (initializer_list<T>);
+	void operator = (const LinkedList<T>&);
 };
 #endif // LINKEDLIST_H
