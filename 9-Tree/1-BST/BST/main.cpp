@@ -25,6 +25,7 @@ void main()
 	a.addI(99);
 	cout << a.isExistI(99) << endl;
 	cout << a.isExistI(101) << endl;
+	a.print();
 	// Tree 2
 	BST<int> b;
 	b.addR(50);
@@ -47,4 +48,5 @@ void main()
 	b.addR(99);
 	cout << b.isExistR(99) << endl;
 	cout << b.isExistR(101) << endl;
+	b.print();
 }

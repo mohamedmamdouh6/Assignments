@@ -7,9 +7,10 @@ struct Node {
 	T value;
 	Node<T>* left = nullptr;
 	Node<T>* right = nullptr;
-	Node(T element) : value(element)
+	Node(T element)
 	{
-		left = right = nullptr;
+		this->value = element;
+		this->left = this->right = nullptr;
 	}
 };
 template <class T>
@@ -48,7 +49,29 @@ private:
 		else
 			isExistRInternal(temp->right, element);
 	}
+	void del(Node<T>* temp)
+	{
+		if (temp)
+		{
+			del(temp->right);
+			del(temp->left);
+			delete temp;
+		}
+	}
+	void printR(Node<T>* temp)
+	{
+		if (temp)
+		{
+			cout << temp->value << " ";
+			printR(temp->left);
+			printR(temp->right);
+		}
+	}
 public:
+	~BST()
+	{
+		del(root);
+	}
 	void addI(T element)
 	{
 		if (!root)
@@ -111,5 +134,10 @@ public:
 	bool isExistR(T element)
 	{
 		return isExistRInternal(root, element);
+	}
+	void print()
+	{
+		printR(root);
+		cout << endl;
 	}
 };
